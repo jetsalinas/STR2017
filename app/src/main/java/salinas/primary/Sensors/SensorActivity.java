@@ -1,4 +1,4 @@
-package salinas.myapplication.Sensors;
+package salinas.primary.sensors;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -8,7 +8,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.app.Activity;
 
-import salinas.myapplication.R;
+import salinas.primary.R;
 
 public class SensorActivity extends Activity implements SensorEventListener{
 
@@ -25,9 +25,9 @@ public class SensorActivity extends Activity implements SensorEventListener{
     @Override
     public final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_sensor);
 
-        //Get all sensors available in device
+        //Get all sensors available in device, returns null if no sensor is available
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mPressure = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
         mTemperature = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
@@ -38,6 +38,7 @@ public class SensorActivity extends Activity implements SensorEventListener{
     @Override
     public final void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Do something here if sensor accuracy changes.
+        //TODO: ACTUALLY DO THIS SALINAS
     }
 
     @Override
@@ -45,13 +46,14 @@ public class SensorActivity extends Activity implements SensorEventListener{
 
         Sensor sensor = event.sensor;
 
-        if(sensor.equals(Sensor.TYPE_PRESSURE)) {
+        //Update sensors if they exist
+        if(sensor.getType() == Sensor.TYPE_PRESSURE) {
             updatePressure(event);
-        } else if(sensor.equals(Sensor.TYPE_AMBIENT_TEMPERATURE)) {
+        } else if(sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE) {
             updateTemperature(event);
-        } else if(sensor.equals(Sensor.TYPE_LIGHT)) {
+        } else if(sensor.getType() == Sensor.TYPE_LIGHT) {
             updateLight(event);
-        } else if(sensor.equals(Sensor.TYPE_RELATIVE_HUMIDITY)) {
+        } else if(sensor.getType() == Sensor.TYPE_RELATIVE_HUMIDITY) {
             updateHumidity(event);
         }
     }
@@ -60,17 +62,24 @@ public class SensorActivity extends Activity implements SensorEventListener{
     protected void onResume() {
         super.onResume();
 
-        //Register all sensors
-
-        mSensorManager.registerListener(this, mTemperature, SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(this, mLight, SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(this, mHumidity, SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(this, mPressure, SensorManager.SENSOR_DELAY_NORMAL);
+        //Register all sensors if they are available
+        if (mPressure != null) {
+            mSensorManager.registerListener(this, mPressure, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+        if (mTemperature != null) {
+            mSensorManager.registerListener(this, mTemperature, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+        if (mLight != null) {
+            mSensorManager.registerListener(this, mLight, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+        if (mHumidity != null) {
+            mSensorManager.registerListener(this, mHumidity, SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 
     @Override
     protected void onPause() {
-        // Be sure to unregister the sensor when the activity pauses.
+        //Unregisters all sensors
         super.onPause();
         mSensorManager.unregisterListener(this);
     }

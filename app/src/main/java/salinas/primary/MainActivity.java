@@ -1,4 +1,4 @@
-package salinas.myapplication;
+package salinas.primary;
 
 import android.app.Activity;
 import android.os.Bundle;

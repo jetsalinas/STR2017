@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="salinas.myapplication">
+    package="salinas.primary">
+
+    <!--Declaration of application requirements-->
+    <uses-feature android:name="android.hardware.wifi" android:required="true"/>
+    <uses-feature android:name="android.hardware.location" android:required="true"/>
+    <uses-feature android:name="android.hardware.ambient_temperature" android:required="true"/>
+    <uses-feature android:name="android.hardware.barometer" android:required="false"/>
+    <uses-feature android:name="android.hardware.light" android:required="false"/>
+    <uses-feature android:name="android.hardware.relative_humidity" android:required="false"/>
 
     <application
         android:allowBackup="true"
@@ -8,17 +16,24 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+
+        <service android:name=".sensors.SensorServiceListener">
+
+        </service>
+
+        <activity android:name="salinas.primary.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".Sensors.SensorActivity"
-            android:label="@string/title_activity_sensor"></activity>
+        <activity android:name=".sensors.SensorActivity">
+
+        </activity>
+
+
     </application>
 
 </manifest>
