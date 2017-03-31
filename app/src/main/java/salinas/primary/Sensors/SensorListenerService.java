@@ -14,7 +14,10 @@ import android.os.IBinder;
  * Created by Jose Salinas on 3/29/2017.
  */
 
-public class SensorServiceListener extends IntentService implements SensorEventListener{
+public class SensorListenerService extends IntentService implements SensorEventListener{
+
+    //TODO: Test and debug sensor data gathering functionality
+    //TODO: Test and debug sensor broadcast functionality
 
     private SensorManager mSensorManager;
     private Sensor mPressure;
@@ -31,14 +34,14 @@ public class SensorServiceListener extends IntentService implements SensorEventL
      *
      * @param name Used to name the worker thread, important only for debugging.
      */
-    public SensorServiceListener(String name) {
-        super("SensorServiceListener Thread");
+    public SensorListenerService(String name) {
+        super("SensorListenerService Thread");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         registerSensors();
-        //TODO: Create broadcast of sensor data
+        //TODO: Create JSON broadcast of sensor data
         stopSelf();
     }
 
@@ -62,7 +65,7 @@ public class SensorServiceListener extends IntentService implements SensorEventL
     @Override
     public final void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Do something here if sensor accuracy changes.
-        //TODO: ACTUALLY DO THIS SALINAS
+        //TODO: Add onAccuracyChanged() logic
     }
 
     @Override

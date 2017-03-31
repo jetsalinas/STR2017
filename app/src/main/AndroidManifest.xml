@@ -17,15 +17,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <service android:name=".sensors.SensorServiceListener">
+        <service android:name=".sensors.SensorListenerService">
 
         </service>
 
         <activity android:name="salinas.primary.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-
             </intent-filter>
         </activity>
 
