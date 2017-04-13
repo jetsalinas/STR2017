@@ -4,8 +4,6 @@
     <string name="title_activity_sensor">SensorActivity</string>
 
     <string name="text_values_location">Location</string>
-    <string name="text_values_latitude">Latitude</string>
-    <string name="text_values_longitude">Longitude</string>
     <string name="text_values_humidity">Humidity</string>
     <string name="text_values_light">Light</string>
     <string name="text_values_pressure">Pressure</string>

@@ -6,7 +6,7 @@ package salinas.primary.data;
 
 public class SensorDataStringBuilder {
 
-    public static String sensorDataString(double latitude, double longitude, double humidity, double light, double pressure, double temperature, String userID) {
+    public static String sensorDataString(float latitude, float longitude, float humidity, float light, float pressure, float temperature, String userID) {
         StringBuilder stringBuilder = new StringBuilder("");
         stringBuilder.append(latitude);
         stringBuilder.append(',');
