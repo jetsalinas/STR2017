@@ -17,11 +17,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <!--Random data services declaration-->
+        <service android:name=".randomdata.RandomDataService" android:exported="false"></service>
+
         <service android:name=".sensors.SensorListenerService">
 
         </service>
 
-        <activity android:name="salinas.primary.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
@@ -30,6 +33,15 @@
         <activity android:name=".sensors.SensorActivity">
 
         </activity>
+
+        <!--Debug files declaration-->
+        <activity android:name=".DebugActivity">
+            <intent-filter>
+                <action android:name="salinas.primary.randomdata.BROADCAST"/>
+            </intent-filter>
+        </activity>
+
+
 
 
     </application>
