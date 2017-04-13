@@ -3,13 +3,16 @@ package salinas.primary;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 
 import android.app.Activity;
+import android.os.Handler;
 import android.widget.TextView;
 
 import salinas.primary.data.UserParameterString;
+import salinas.primary.randomdata.Constants;
 import salinas.primary.randomdata.RandomDataService;
 
 /**
@@ -18,13 +21,14 @@ import salinas.primary.randomdata.RandomDataService;
 
 public class DebugActivity extends Activity {
 
-    TextView valuesLocation = (TextView)findViewById(R.id.randomlocationvalue);
-    TextView valuesHumidity = (TextView)findViewById(R.id.randomhumidityvalue;
-    TextView valuesLight = (TextView)findViewById(R.id.randomlightvalue);
-    TextView valuesPressure = (TextView)findViewById(R.id.randompressurevalue);
-    TextView valuesTemperature = (TextView)findViewById(R.id.randomtemperaturevalue);
-    TextView valuesUserID = (TextView)findViewById(R.id.randomuserid);
-    
+    private TextView valuesLocation;
+    private TextView valuesHumidity;
+    private TextView valuesLight;
+    private TextView valuesPressure;
+    private TextView valuesTemperature;
+    private TextView valuesUserID;
+
+    private DebugBroadcastReceiver broadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +36,48 @@ public class DebugActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug);
 
-        Intent randomDataIntent = new Intent(this.getBaseContext(), RandomDataService.class);
-        randomDataIntent.setData(Uri.parse((new UserParameterString(true, true, true, true, true, true)).getData()));
+        valuesLocation = (TextView)findViewById(R.id.randomlocationvalue);
+        valuesHumidity = (TextView)findViewById(R.id.randomhumidityvalue);
+        valuesLight = (TextView)findViewById(R.id.randomlightvalue);
+        valuesPressure = (TextView)findViewById(R.id.randompressurevalue);
+        valuesTemperature = (TextView)findViewById(R.id.randomtemperaturevalue);
+        valuesUserID = (TextView)findViewById(R.id.randomuserid);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        broadcastReceiver = new DebugBroadcastReceiver(new Handler());
+        IntentFilter intentFilter = new IntentFilter(Constants.BROADCAST_RANDOM_DATA);
+        getBaseContext().registerReceiver(broadcastReceiver, intentFilter);
+
+        Intent randomDataIntent = new Intent(this, RandomDataService.class);
+        randomDataIntent.setData(Uri.parse((new UserParameterString(true, true, true, true, true, true)).getData()));
         this.startService(randomDataIntent);
+    }
+
+    protected class DebugBroadcastReceiver extends BroadcastReceiver {
+
+        private Handler handler;
+
+        public DebugBroadcastReceiver(Handler handler) {
+            this.handler = handler;
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    valuesLocation.setText("Broadcast received.");
+                    valuesHumidity.setText("Broadcast received.");
+                    valuesLight.setText("Broadcast received.");
+                    valuesPressure.setText("Broadcast received.");
+                    valuesTemperature.setText("Broadcast received.");
+                    valuesUserID.setText("Broadcast received.");
+                }
+            });
+        }
     }
 }

@@ -2,6 +2,7 @@ package salinas.primary.randomdata;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +11,11 @@ import java.util.Arrays;
  */
 
 public class RandomDataService extends IntentService {
+
+
+    public RandomDataService() {
+        super("Random Data Service");
+    }
 
     public RandomDataService(String name) {
         super(name);
@@ -49,6 +55,7 @@ public class RandomDataService extends IntentService {
             stopSelf();
         }
 
+        Log.d("RandomDataService" , "Successfully processed data parameters");
         broadcastData();
     }
 

@@ -61,42 +61,42 @@
             android:layout_height="@dimen/text_content_body"
             android:text = "@string/text_values_nodata"
             android:layout_margin="@dimen/text_padding_body"
-            android:layout_toRightOf="@+id/randomlocationvalue"/>
+            android:id="@+id/randomlocationvalue"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/text_content_body"
             android:text = "@string/text_values_nodata"
             android:layout_margin="@dimen/text_padding_body"
-            android:layout_toRightOf="@+id/randomlightvalue"/>
+            android:id="@+id/randomlightvalue"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/text_content_body"
             android:text = "@string/text_values_nodata"
             android:layout_margin="@dimen/text_padding_body"
-            android:layout_toRightOf="@+id/randomhumidityvalue"/>
+            android:id="@+id/randomhumidityvalue"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/text_content_body"
             android:text = "@string/text_values_nodata"
             android:layout_margin="@dimen/text_padding_body"
-            android:layout_toRightOf="@+id/randompressurevalue"/>
+            android:id="@+id/randompressurevalue"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/text_content_body"
             android:text = "@string/text_values_nodata"
             android:layout_margin="@dimen/text_padding_body"
-            android:layout_toRightOf="@+id/randomtemperaturevalue"/>
+            android:id="@+id/randomtemperaturevalue"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/text_content_body"
             android:text = "@string/text_values_nodata"
             android:layout_margin="@dimen/text_padding_body"
-            android:layout_toRightOf="@+id/randomuserid"/>
+            android:id="@+id/randomuserid"/>
     </LinearLayout>
 </RelativeLayout>
 
