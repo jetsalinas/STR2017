@@ -24,7 +24,7 @@
 
         </service>
 
-        <activity android:name="salinas.primary.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
@@ -37,9 +37,11 @@
         <!--Debug files declaration-->
         <activity android:name=".DebugActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="salinas.primary.randomdata.BROADCAST"/>
             </intent-filter>
         </activity>
+
+
 
 
     </application>
