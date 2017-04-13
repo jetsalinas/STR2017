@@ -5,7 +5,6 @@ import android.content.Intent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 /**
  * Created by Jose Salinas on 4/13/2017.
  */
@@ -22,6 +21,7 @@ public class RandomDataService extends IntentService {
     private boolean hasPressure = false;
     private boolean hasTemperature = false;
     private boolean hasUserID = false;
+    private String data = "";
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -46,7 +46,15 @@ public class RandomDataService extends IntentService {
                 hasUserID = true;
             }
         } else {
-            //TODO: return null on intent and kill service
+            stopSelf();
         }
+
+        broadcastData();
+    }
+
+    private void broadcastData() {
+        Intent localIntent = new Intent(Constants.BROADCAST_RANDOM_DATA);
+        localIntent.putExtra(Constants.BASIC_RANDOM_DATA_STATUS, data);
+        sendBroadcast(localIntent);
     }
 }
