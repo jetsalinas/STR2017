@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+import salinas.primary.data.SensorDataStringBuilder;
+
 /**
  * Created by Jose Salinas on 4/13/2017.
  */
@@ -29,7 +31,6 @@ public class RandomDataService extends IntentService {
     private boolean hasPressure = false;
     private boolean hasTemperature = false;
     private boolean hasUserID = false;
-    private String data = "";
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -57,8 +58,43 @@ public class RandomDataService extends IntentService {
             stopSelf();
         }
 
-        Log.d("RandomDataService" , "Successfully processed data parameters");
-        broadcastData();
+        final Runnable generateData = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while(true) {
+                        generateData();
+                        broadcastData();
+                        Thread.sleep(3*1000);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        generateData.run();
+    }
+
+    private double latitude;
+    private double longitude;
+    private double humidity;
+    private double light;
+    private double pressure;
+    private double temperature;
+    private final String userID = "SALINAS";
+    private Random random = new Random();
+    private String data = "";
+
+    private void generateData() {
+
+        latitude = random.nextFloat()*180;
+        longitude = random.nextFloat()*180;
+        humidity = random.nextFloat()*100;
+        light = random.nextFloat()*40000;
+        pressure = random.nextFloat()*800 + 300;
+        temperature = random.nextFloat()*371.3 - 271.3;
+
+        data = SensorDataStringBuilder.sensorDataString(latitude, longitude, humidity, light, pressure, temperature, userID);
     }
 
     private void broadcastData() {

@@ -11,6 +11,9 @@ import android.app.Activity;
 import android.os.Handler;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import salinas.primary.data.UserParameterStringBuilder;
 import salinas.primary.randomdata.Constants;
 import salinas.primary.randomdata.RandomDataService;
@@ -21,7 +24,8 @@ import salinas.primary.randomdata.RandomDataService;
 
 public class DebugActivity extends Activity {
 
-    private TextView valuesLocation;
+    private TextView valuesLatitude;
+    private TextView valuesLongitude;
     private TextView valuesHumidity;
     private TextView valuesLight;
     private TextView valuesPressure;
@@ -36,7 +40,8 @@ public class DebugActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug);
 
-        valuesLocation = (TextView)findViewById(R.id.randomlocationvalue);
+        valuesLatitude = (TextView)findViewById(R.id.randomlatitudevalue);
+        valuesLongitude= (TextView)findViewById(R.id.randomlongitudevalue);
         valuesHumidity = (TextView)findViewById(R.id.randomhumidityvalue);
         valuesLight = (TextView)findViewById(R.id.randomlightvalue);
         valuesPressure = (TextView)findViewById(R.id.randompressurevalue);
@@ -63,6 +68,15 @@ public class DebugActivity extends Activity {
         unregisterReceiver(broadcastReceiver);
     }
 
+    ArrayList<String> data;
+    String latitude = "";
+    String longitude = "";
+    String humidity = "";
+    String light = "";
+    String pressure = "";
+    String temperature = "";
+    String userID = "";
+
     protected class DebugBroadcastReceiver extends BroadcastReceiver {
 
         private Handler handler;
@@ -72,16 +86,26 @@ public class DebugActivity extends Activity {
         }
 
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(Context context, final Intent intent) {
+            data = new ArrayList<>(Arrays.asList(intent.getStringExtra(Constants.BASIC_RANDOM_DATA_STATUS).split(",")));
+            latitude = data.get(0);
+            longitude = data.get(1);
+            humidity = data.get(2);
+            light = data.get(3);
+            pressure = data.get(4);
+            temperature = data.get(5);
+            userID = data.get(6);
+
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    valuesLocation.setText("Broadcast received.");
-                    valuesHumidity.setText("Broadcast received.");
-                    valuesLight.setText("Broadcast received.");
-                    valuesPressure.setText("Broadcast received.");
-                    valuesTemperature.setText("Broadcast received.");
-                    valuesUserID.setText("Broadcast received.");
+                    valuesLatitude.setText(latitude);
+                    valuesLongitude.setText(longitude);
+                    valuesHumidity.setText(humidity);
+                    valuesLight.setText(light);
+                    valuesPressure.setText(pressure);
+                    valuesTemperature.setText(temperature);
+                    valuesUserID.setText(userID);
                 }
             });
         }
