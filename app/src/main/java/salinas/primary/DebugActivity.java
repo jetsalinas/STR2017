@@ -58,7 +58,7 @@ public class DebugActivity extends Activity {
         getBaseContext().registerReceiver(broadcastReceiver, intentFilter);
 
         Intent randomDataIntent = new Intent(this, RandomDataService.class);
-        randomDataIntent.setData(Uri.parse(UserParameterStringBuilder.userParameterString(true, true, true, true, true, true)));
+        randomDataIntent.setData(Uri.parse(UserParameterStringBuilder.userParameterString(true, false, false, false, false, false)));
         this.startService(randomDataIntent);
     }
 
@@ -99,13 +99,38 @@ public class DebugActivity extends Activity {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    valuesLatitude.setText(latitude);
-                    valuesLongitude.setText(longitude);
-                    valuesHumidity.setText(humidity);
-                    valuesLight.setText(light);
-                    valuesPressure.setText(pressure);
-                    valuesTemperature.setText(temperature);
-                    valuesUserID.setText(userID);
+                    if(latitude.equals(Double.toString(-1000))) {
+                        valuesLatitude.setText(getResources().getString(R.string.text_values_nodata));
+                        valuesLongitude.setText(getResources().getString(R.string.text_values_nodata));
+                    } else {
+                        valuesLatitude.setText(latitude);
+                        valuesLongitude.setText(longitude);
+                    }
+                    if(humidity.equals(Double.toString(-1000))) {
+                        valuesHumidity.setText(getResources().getString(R.string.text_values_nodata));
+                    } else {
+                        valuesHumidity.setText(humidity);
+                    }
+                    if(light.equals(Double.toString(-1000))) {
+                        valuesLight.setText(getResources().getString(R.string.text_values_nodata));
+                    } else {
+                        valuesLight.setText(light);
+                    }
+                    if(pressure.equals(Double.toString(-1000))) {
+                        valuesPressure.setText(getResources().getString(R.string.text_values_nodata));
+                    } else {
+                        valuesPressure.setText(pressure);
+                    }
+                    if(temperature.equals(Double.toString(-1000))) {
+                        valuesTemperature.setText(getResources().getString(R.string.text_values_nodata));
+                    } else {
+                        valuesTemperature.setText(temperature);
+                    }
+                    if(userID.equals("UNKNOWN")) {
+                        valuesUserID.setText(getResources().getString(R.string.text_values_nodata));
+                    } else {
+                        valuesUserID.setText(userID);
+                    }
                 }
             });
         }

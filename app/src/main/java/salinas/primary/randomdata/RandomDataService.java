@@ -37,21 +37,21 @@ public class RandomDataService extends IntentService {
         String dataString = intent.getDataString();
         ArrayList<String> dataParameters = new ArrayList<>(Arrays.asList(dataString.split(",")));
 
-        if(dataParameters.get(0) == "TRUE") {
+        if(dataParameters.get(0).equals("TRUE")) {
             hasLocation = true;
-            if(dataParameters.get(1) == "TRUE") {
+            if(dataParameters.get(1).equals("TRUE")) {
                 hasHumidity = true;
             }
-            if(dataParameters.get(2) == "TRUE") {
+            if(dataParameters.get(2).equals("TRUE")) {
                 hasLight = true;
             }
-            if(dataParameters.get(3) == "TRUE") {
+            if(dataParameters.get(3).equals("TRUE")) {
                 hasPressure = true;
             }
-            if(dataParameters.get(4) == "TRUE") {
+            if(dataParameters.get(4).equals("TRUE")) {
                 hasTemperature = true;
             }
-            if(dataParameters.get(5) == "TRUE") {
+            if(dataParameters.get(5).equals("TRUE")) {
                 hasUserID = true;
             }
         } else {
@@ -81,18 +81,46 @@ public class RandomDataService extends IntentService {
     private double light;
     private double pressure;
     private double temperature;
-    private final String userID = "SALINAS";
+    private String userID;
     private Random random = new Random();
     private String data = "";
 
     private void generateData() {
 
-        latitude = random.nextFloat()*180;
-        longitude = random.nextFloat()*180;
-        humidity = random.nextFloat()*100;
-        light = random.nextFloat()*40000;
-        pressure = random.nextFloat()*800 + 300;
-        temperature = random.nextFloat()*371.3 - 271.3;
+        if(hasLocation) {
+            latitude = random.nextFloat()*180;
+            longitude = random.nextFloat()*180;
+        } else {
+            latitude = -1000;
+            longitude = -1000;
+        }
+        if(hasHumidity) {
+            humidity = random.nextFloat()*100;
+        } else {
+            humidity = -1000;
+        }
+        if(hasLight) {
+            light = random.nextFloat()*40000;
+
+        } else {
+            light = -1000;
+        }
+        if(hasPressure) {
+            pressure = random.nextFloat()*800 + 300;
+
+        } else {
+            pressure = -1000;
+        }
+        if(hasTemperature) {
+            temperature = random.nextFloat()*371.3 - 271.3;
+        } else {
+            temperature = -1000;
+        }
+        if(hasUserID) {
+            userID = "SALINAS";
+        } else {
+            userID = "UNKNOWN";
+        }
 
         data = SensorDataStringBuilder.sensorDataString(latitude, longitude, humidity, light, pressure, temperature, userID);
     }
