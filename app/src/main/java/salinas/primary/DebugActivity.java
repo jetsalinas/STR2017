@@ -11,7 +11,7 @@ import android.app.Activity;
 import android.os.Handler;
 import android.widget.TextView;
 
-import salinas.primary.data.UserParameterString;
+import salinas.primary.data.UserParameterStringBuilder;
 import salinas.primary.randomdata.Constants;
 import salinas.primary.randomdata.RandomDataService;
 
@@ -53,8 +53,14 @@ public class DebugActivity extends Activity {
         getBaseContext().registerReceiver(broadcastReceiver, intentFilter);
 
         Intent randomDataIntent = new Intent(this, RandomDataService.class);
-        randomDataIntent.setData(Uri.parse((new UserParameterString(true, true, true, true, true, true)).getData()));
+        randomDataIntent.setData(Uri.parse(UserParameterStringBuilder.userParameterString(true, true, true, true, true, true)));
         this.startService(randomDataIntent);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(broadcastReceiver);
     }
 
     protected class DebugBroadcastReceiver extends BroadcastReceiver {
