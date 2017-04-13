@@ -1,4 +1,13 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Meteor</string>
+    <string name="title_activity_debug">Debug Activity</string>
     <string name="title_activity_sensor">SensorActivity</string>
+
+    <string name="text_values_location">Location</string>
+    <string name="text_values_humidity">Humidity</string>
+    <string name="text_values_light">Light</string>
+    <string name="text_values_pressure">Pressure</string>
+    <string name="text_values_temperature">Temperature</string>
+    <string name="text_values_userid">User ID</string>
+    <string name="text_values_nodata">No data available</string>
 </resources>
