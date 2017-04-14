@@ -1,7 +1,12 @@
 package salinas.primary.sensors;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -14,7 +19,7 @@ import salinas.primary.data.SensorDataStringBuilder;
  * Created by Jose Salinas on 4/14/2017.
  */
 
-public class SensorService extends IntentService {
+public class SensorService extends IntentService implements SensorEventListener{
 
     public SensorService() {
         super("SensorService");
@@ -34,7 +39,6 @@ public class SensorService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        Log.e("SensorService", "Intent received");
         String dataString = intent.getDataString();
         ArrayList<String> dataParameters = new ArrayList<>(Arrays.asList(dataString.split(",")));
 
@@ -59,12 +63,12 @@ public class SensorService extends IntentService {
             stopSelf();
         }
 
-        final Runnable generateData = new Runnable() {
+        final Runnable updateData = new Runnable() {
             @Override
             public void run() {
                 try {
                     while(true) {
-                        generateData();
+                        updateData();
                         broadcastData();
                         Thread.sleep(3*1000);
                     }
@@ -73,7 +77,7 @@ public class SensorService extends IntentService {
                 }
             }
         };
-        generateData.run();
+        updateData.run();
     }
 
     private double latitude;
@@ -86,49 +90,114 @@ public class SensorService extends IntentService {
     private Random random = new Random();
     private String data = "";
 
-    private void generateData() {
-
-        if(hasLocation) {
-            latitude = random.nextFloat()*180;
-            longitude = random.nextFloat()*180;
-        } else {
-            latitude = -1000;
-            longitude = -1000;
-        }
-        if(hasHumidity) {
-            humidity = random.nextFloat()*100;
-        } else {
-            humidity = -1000;
-        }
-        if(hasLight) {
-            light = random.nextFloat()*40000;
-
-        } else {
-            light = -1000;
-        }
-        if(hasPressure) {
-            pressure = random.nextFloat()*800 + 300;
-
-        } else {
-            pressure = -1000;
-        }
-        if(hasTemperature) {
-            temperature = random.nextFloat()*371.3 - 271.3;
-        } else {
-            temperature = -1000;
-        }
-        if(hasUserID) {
-            userID = "SALINAS";
-        } else {
-            userID = "UNKNOWN";
-        }
-
-        data = SensorDataStringBuilder.sensorDataString(latitude, longitude, humidity, light, pressure, temperature, userID);
-    }
-
     private void broadcastData() {
         Intent localIntent = new Intent(Constants.BROADCAST_SENSOR_DATA);
         localIntent.putExtra(Constants.BASIC_SENSOR_DATA_STATUS, data);
         sendBroadcast(localIntent);
+    }
+
+    @Override
+    public void onCreate() {
+        registerSensors();
+        super.onCreate();
+    }
+
+    @Override
+    public void onDestroy() {
+        unregisterSensors();
+        super.onDestroy();
+    }
+
+    @Override
+    public final void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // Do something here if sensor accuracy changes.
+        //TODO: Add onAccuracyChanged() logic
+    }
+
+    @Override
+    public final void onSensorChanged(SensorEvent event) {
+
+        Sensor sensor = event.sensor;
+
+        //Update sensors if they exist and are permitted
+        if(sensor.getType() == Sensor.TYPE_PRESSURE) {
+            updatePressure(event);
+        } else if(sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE) {
+            updateTemperature(event);
+        } else if(sensor.getType() == Sensor.TYPE_LIGHT) {
+            updateLight(event);
+        } else if(sensor.getType() == Sensor.TYPE_RELATIVE_HUMIDITY) {
+            updateHumidity(event);
+        }
+    }
+
+    //Update functions for all sensors
+    private void updatePressure(SensorEvent event) {
+        pressure = Double.parseDouble(Float.valueOf(event.values[0]).toString());
+    }
+
+    private void updateTemperature(SensorEvent event) {
+        temperature = Double.parseDouble(Float.valueOf(event.values[0]).toString());
+    }
+
+    private void updateLight(SensorEvent event) {
+        light = Double.parseDouble(Float.valueOf(event.values[0]).toString());
+    }
+    private void updateHumidity(SensorEvent event) {
+        humidity = Double.parseDouble(Float.valueOf(event.values[0]).toString());
+    }
+
+    private void updateData() {
+        data = SensorDataStringBuilder.sensorDataString(latitude, longitude, humidity, light, pressure, temperature, userID);
+    }
+
+    private SensorManager mSensorManager;
+    private Sensor mPressure;
+    private Sensor mTemperature;
+    private Sensor mLight;
+    private Sensor mHumidity;
+
+    protected void registerSensors() {
+        //Get all sensors available in device, returns null if no sensor is available
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mPressure = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
+        mTemperature = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
+        mLight = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        mHumidity = mSensorManager.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY);
+
+        //Register all sensors if they are available
+        if (mPressure != null) {
+            mSensorManager.registerListener(this, mPressure, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+        if (mTemperature != null) {
+            mSensorManager.registerListener(this, mTemperature, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+        if (mLight != null) {
+            mSensorManager.registerListener(this, mLight, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+        if (mHumidity != null) {
+            mSensorManager.registerListener(this, mHumidity, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
+
+    protected void unregisterSensors() {
+        mSensorManager.unregisterListener(this);
+    }
+
+    //Getter functions for all sensors
+    public double getHumidity() {
+        return humidity;
+    }
+
+    public double getLight() {
+        return light;
+    }
+
+    public double getTemperature() {
+        return temperature;
+    }
+
+    public double getPressure() {
+        return pressure;
     }
 }

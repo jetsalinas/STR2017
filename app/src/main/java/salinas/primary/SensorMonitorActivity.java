@@ -61,8 +61,6 @@ public class SensorMonitorActivity extends Activity {
         Intent sensorDataIntent = new Intent(this, SensorService.class);
         sensorDataIntent.setData(Uri.parse(UserParameterStringBuilder.userParameterString(true, true, true, true, true, true)));
         this.startService(sensorDataIntent);
-
-        Log.e("SensorMonitorActivity", "I AM SCREAMING");
     }
 
     @Override
