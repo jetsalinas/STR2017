@@ -27,13 +27,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/text_content_body"
-            android:text = "@string/text_values_light"
+            android:text = "@string/text_values_humidity"
             android:layout_margin="@dimen/text_padding_body"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/text_content_body"
-            android:text = "@string/text_values_humidity"
+            android:text = "@string/text_values_light"
             android:layout_margin="@dimen/text_padding_body"/>
 
         <TextView
@@ -82,14 +82,14 @@
             android:layout_height="@dimen/text_content_body"
             android:text = "@string/text_values_nodata"
             android:layout_margin="@dimen/text_padding_body"
-            android:id="@+id/randomlightvalue"/>
+            android:id="@+id/randomhumidityvalue"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/text_content_body"
             android:text = "@string/text_values_nodata"
             android:layout_margin="@dimen/text_padding_body"
-            android:id="@+id/randomhumidityvalue"/>
+            android:id="@+id/randomlightvalue"/>
 
         <TextView
             android:layout_width="match_parent"

@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import android.app.Activity;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class DebugActivity extends Activity {
         getBaseContext().registerReceiver(broadcastReceiver, intentFilter);
 
         Intent randomDataIntent = new Intent(this, RandomDataService.class);
-        randomDataIntent.setData(Uri.parse(UserParameterStringBuilder.userParameterString(true, false, false, false, false, false)));
+        randomDataIntent.setData(Uri.parse(UserParameterStringBuilder.userParameterString(true, true, false, false, false, false)));
         this.startService(randomDataIntent);
     }
 

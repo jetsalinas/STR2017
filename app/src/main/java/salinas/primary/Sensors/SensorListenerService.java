@@ -29,13 +29,17 @@ public class SensorListenerService extends IntentService implements SensorEventL
     private double light;
     private double humidity;
 
+    public SensorListenerService() {
+        super("SensorListenerService");
+    }
+
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *
      * @param name Used to name the worker thread, important only for debugging.
      */
     public SensorListenerService(String name) {
-        super("SensorListenerService Thread");
+        super(name);
     }
 
     @Override
