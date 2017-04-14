@@ -9,6 +9,7 @@
     <uses-feature android:name="android.hardware.barometer" android:required="false"/>
     <uses-feature android:name="android.hardware.light" android:required="false"/>
     <uses-feature android:name="android.hardware.relative_humidity" android:required="false"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -21,7 +22,6 @@
         <service android:name=".randomdata.RandomDataService" android:exported="false"></service>
 
         <!--Sensor services and activities declaration-->
-        <service android:name=".sensors.SensorListenerService"></service>
         <service android:name=".sensors.SensorService"></service>
 
         <activity android:name=".SensorMonitorActivity">
@@ -44,10 +44,5 @@
                 <action android:name="salinas.primary.randomdata.BROADCAST"/>
             </intent-filter>
         </activity>
-
-
-
-
     </application>
-
 </manifest>
