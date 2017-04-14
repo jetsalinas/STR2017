@@ -18,6 +18,9 @@ import salinas.primary.data.UserParameterStringBuilder;
 import salinas.primary.sensors.Constants;
 import salinas.primary.sensors.SensorService;
 
+import static salinas.primary.data.Constants.DATA_UNAVAILABLE;
+import static salinas.primary.data.Constants.NO_USER_ID;
+
 /**
  * Created by Jose Salinas on 4/14/2017.
  */
@@ -100,34 +103,34 @@ public class SensorMonitorActivity extends Activity {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if(latitude.equals(Double.toString(-1000))) {
+                    if(latitude.equals(Double.toString(DATA_UNAVAILABLE))) {
                         valuesLatitude.setText(getResources().getString(R.string.text_values_nodata));
                         valuesLongitude.setText(getResources().getString(R.string.text_values_nodata));
                     } else {
                         valuesLatitude.setText(latitude);
                         valuesLongitude.setText(longitude);
                     }
-                    if(humidity.equals(Double.toString(-1000))) {
+                    if(humidity.equals(Double.toString(DATA_UNAVAILABLE))) {
                         valuesHumidity.setText(getResources().getString(R.string.text_values_nodata));
                     } else {
                         valuesHumidity.setText(humidity);
                     }
-                    if(light.equals(Double.toString(-1000))) {
+                    if(light.equals(Double.toString(DATA_UNAVAILABLE))) {
                         valuesLight.setText(getResources().getString(R.string.text_values_nodata));
                     } else {
                         valuesLight.setText(light);
                     }
-                    if(pressure.equals(Double.toString(-1000))) {
+                    if(pressure.equals(Double.toString(DATA_UNAVAILABLE))) {
                         valuesPressure.setText(getResources().getString(R.string.text_values_nodata));
                     } else {
                         valuesPressure.setText(pressure);
                     }
-                    if(temperature.equals(Double.toString(-1000))) {
+                    if(temperature.equals(Double.toString(DATA_UNAVAILABLE))) {
                         valuesTemperature.setText(getResources().getString(R.string.text_values_nodata));
                     } else {
                         valuesTemperature.setText(temperature);
                     }
-                    if(userID.equals("UNKNOWN")) {
+                    if(userID.equals(NO_USER_ID)) {
                         valuesUserID.setText(getResources().getString(R.string.text_values_nodata));
                     } else {
                         valuesUserID.setText(userID);

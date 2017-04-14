@@ -7,13 +7,14 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
 import salinas.primary.data.SensorDataStringBuilder;
+
+import static salinas.primary.data.Constants.*;
 
 /**
  * Created by Jose Salinas on 4/14/2017.
@@ -87,7 +88,6 @@ public class SensorService extends IntentService implements SensorEventListener{
     private double pressure;
     private double temperature;
     private String userID;
-    private Random random = new Random();
     private String data = "";
 
     private void broadcastData() {
@@ -98,6 +98,13 @@ public class SensorService extends IntentService implements SensorEventListener{
 
     @Override
     public void onCreate() {
+        latitude = DATA_UNAVAILABLE;
+        longitude = DATA_UNAVAILABLE;
+        humidity = DATA_UNAVAILABLE;
+        light = DATA_UNAVAILABLE;
+        pressure = DATA_UNAVAILABLE;
+        temperature = DATA_UNAVAILABLE;
+        userID = DEBUG_USER_ID;
         registerSensors();
         super.onCreate();
     }
@@ -120,13 +127,13 @@ public class SensorService extends IntentService implements SensorEventListener{
         Sensor sensor = event.sensor;
 
         //Update sensors if they exist and are permitted
-        if(sensor.getType() == Sensor.TYPE_PRESSURE) {
+        if(sensor.getType() == Sensor.TYPE_PRESSURE && hasPressure) {
             updatePressure(event);
-        } else if(sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE) {
+        } else if(sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE && hasTemperature) {
             updateTemperature(event);
-        } else if(sensor.getType() == Sensor.TYPE_LIGHT) {
+        } else if(sensor.getType() == Sensor.TYPE_LIGHT && hasLight) {
             updateLight(event);
-        } else if(sensor.getType() == Sensor.TYPE_RELATIVE_HUMIDITY) {
+        } else if(sensor.getType() == Sensor.TYPE_RELATIVE_HUMIDITY && hasLocation) {
             updateHumidity(event);
         }
     }
@@ -148,7 +155,11 @@ public class SensorService extends IntentService implements SensorEventListener{
     }
 
     private void updateData() {
-        data = SensorDataStringBuilder.sensorDataString(latitude, longitude, humidity, light, pressure, temperature, userID);
+        if(hasUserID) {
+            data = SensorDataStringBuilder.sensorDataString(latitude, longitude, humidity, light, pressure, temperature, userID);
+        } else {
+            data = SensorDataStringBuilder.sensorDataString(latitude, longitude, humidity, light, pressure, temperature);
+        }
     }
 
     private SensorManager mSensorManager;
