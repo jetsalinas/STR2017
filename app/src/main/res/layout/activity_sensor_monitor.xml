@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:id = "@+id/sensordatalabels"
+        android:layout_width="200dp"
+        android:layout_height="400dp"
+        android:orientation= "vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_content_body"
+            android:text = "@string/text_values_latitude"
+            android:layout_margin="@dimen/text_padding_body"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_content_body"
+            android:text = "@string/text_values_longitude"
+            android:layout_margin="@dimen/text_padding_body"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_content_body"
+            android:text = "@string/text_values_light"
+            android:layout_margin="@dimen/text_padding_body"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_content_body"
+            android:text = "@string/text_values_humidity"
+            android:layout_margin="@dimen/text_padding_body"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_content_body"
+            android:text = "@string/text_values_pressure"
+            android:layout_margin="@dimen/text_padding_body"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_content_body"
+            android:text = "@string/text_values_temperature"
+            android:layout_margin="@dimen/text_padding_body"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_content_body"
+            android:text = "@string/text_values_userid"
+            android:layout_margin="@dimen/text_padding_body"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id = "@+id/sensordatavalues"
+        android:layout_width="200dp"
+        android:layout_height="400dp"
+        android:layout_toRightOf="@id/sensordatalabels"
+        android:orientation= "vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_content_body"
+            android:text = "@string/text_values_nodata"
+            android:layout_margin="@dimen/text_padding_body"
+            android:id="@+id/sensorlatitudevalue"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_content_body"
+            android:text = "@string/text_values_nodata"
+            android:layout_margin="@dimen/text_padding_body"
+            android:id="@+id/sensorlongitudevalue"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_content_body"
+            android:text = "@string/text_values_nodata"
+            android:layout_margin="@dimen/text_padding_body"
+            android:id="@+id/sensorlightvalue"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_content_body"
+            android:text = "@string/text_values_nodata"
+            android:layout_margin="@dimen/text_padding_body"
+            android:id="@+id/sensorhumidityvalue"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_content_body"
+            android:text = "@string/text_values_nodata"
+            android:layout_margin="@dimen/text_padding_body"
+            android:id="@+id/sensorpressurevalue"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_content_body"
+            android:text = "@string/text_values_nodata"
+            android:layout_margin="@dimen/text_padding_body"
+            android:id="@+id/sensortemperaturevalue"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_content_body"
+            android:text = "@string/text_values_nodata"
+            android:layout_margin="@dimen/text_padding_body"
+            android:id="@+id/sensoruserid"/>
+    </LinearLayout>
+</RelativeLayout>
+
