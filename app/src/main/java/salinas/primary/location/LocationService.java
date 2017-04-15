@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -23,6 +24,7 @@ import static salinas.primary.data.Constants.*;
 
 public class LocationService extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    public static final String TAG = "LOCATION_SERVICE";
 
     public LocationService() {
         super("LocationService");
@@ -42,6 +44,7 @@ public class LocationService extends IntentService implements GoogleApiClient.Co
         if (googleApiClient == null) {
             googleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(LocationServices.API).build();
         }
+        googleApiClient.connect();
     }
 
     private String isConnected = IS_NOT_CONNECTED;
@@ -68,6 +71,12 @@ public class LocationService extends IntentService implements GoogleApiClient.Co
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         googleApiClient.connect();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Log.i(LOCATION_SERVICE, "Handling intent.");
 
         if (isConnected == IS_CONNECTED) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -80,6 +89,7 @@ public class LocationService extends IntentService implements GoogleApiClient.Co
             if(lastKnownLocation != null) {
                 lastKnownLatitude = lastKnownLocation.getLatitude();
                 lastKnownLongitude = lastKnownLocation.getLongitude();
+                Log.i(TAG, "Broadcasting last known location");
             } else {
                 lastKnownLatitude = DATA_UNAVAILABLE;
                 lastKnownLongitude = DATA_UNAVAILABLE;

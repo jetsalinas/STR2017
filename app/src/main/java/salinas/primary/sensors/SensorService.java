@@ -1,25 +1,33 @@
 package salinas.primary.sensors;
 
 import android.app.IntentService;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Handler;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import salinas.primary.data.SensorDataStringBuilder;
+import salinas.primary.location.LocationService;
 
 import static salinas.primary.data.Constants.*;
+import static salinas.primary.location.Constants.*;
 
 /**
  * Created by Jose Salinas on 4/14/2017.
  */
 
 public class SensorService extends IntentService implements SensorEventListener {
+
+    public static final String TAG ="SENSOR_SERVICE";
 
     public SensorService() {
         super("SensorService");
@@ -68,6 +76,7 @@ public class SensorService extends IntentService implements SensorEventListener 
             public void run() {
                 try {
                     while(true) {
+                        Log.i(TAG, "Updating sensor information");
                         updateData();
                         broadcastData();
                         Thread.sleep(3*1000);
@@ -154,10 +163,41 @@ public class SensorService extends IntentService implements SensorEventListener 
     }
 
     private void updateData() {
+
+        updateLocation();
+
         if(hasUserID) {
             data = SensorDataStringBuilder.sensorDataString(latitude, longitude, humidity, light, pressure, temperature, userID);
         } else {
             data = SensorDataStringBuilder.sensorDataString(latitude, longitude, humidity, light, pressure, temperature);
+        }
+    }
+
+    private void updateLocation() {
+        if(hasLocation) {
+            LocationBroadcastReceiver broadcastReceiver = new LocationBroadcastReceiver();
+            IntentFilter intentFilter = new IntentFilter(BROADCAST_LOCATION);
+            registerReceiver(broadcastReceiver, intentFilter);
+
+            Intent requestLocationData = new Intent(this, LocationService.class);
+            startService(requestLocationData);
+        } else {
+            latitude = DATA_UNAVAILABLE;
+            longitude = DATA_UNAVAILABLE;
+        }
+    }
+
+    protected class LocationBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getStringExtra(BROADCAST_CONNECTION_STATUS) == IS_CONNECTED) {
+                latitude = intent.getDoubleExtra(BROADCAST_LOCATION_LATITUDE, DATA_UNAVAILABLE);
+                longitude = intent.getDoubleExtra(BROADCAST_LOCATION_LONGITUDE, DATA_UNAVAILABLE);
+            } else {
+                latitude = DATA_UNAVAILABLE;
+                longitude = DATA_UNAVAILABLE;
+            }
         }
     }
 
@@ -194,20 +234,4 @@ public class SensorService extends IntentService implements SensorEventListener 
         mSensorManager.unregisterListener(this);
     }
 
-    //Getter functions for all sensors
-    public double getHumidity() {
-        return humidity;
-    }
-
-    public double getLight() {
-        return light;
-    }
-
-    public double getTemperature() {
-        return temperature;
-    }
-
-    public double getPressure() {
-        return pressure;
-    }
 }
