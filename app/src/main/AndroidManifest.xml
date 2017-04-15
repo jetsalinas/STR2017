@@ -30,6 +30,9 @@
             </intent-filter>
         </activity>
 
+        <!--Location services and activities declaration-->
+        <service android:name=".location.LocationService"></service>
+
         <!--Main activity declaration-->
 
         <activity android:name=".MainActivity">
