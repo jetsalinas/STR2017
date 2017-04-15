@@ -10,7 +10,6 @@ import android.hardware.SensorManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
 import salinas.primary.data.SensorDataStringBuilder;
 
@@ -20,7 +19,7 @@ import static salinas.primary.data.Constants.*;
  * Created by Jose Salinas on 4/14/2017.
  */
 
-public class SensorService extends IntentService implements SensorEventListener{
+public class SensorService extends IntentService implements SensorEventListener {
 
     public SensorService() {
         super("SensorService");

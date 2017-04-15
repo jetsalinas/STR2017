@@ -9,6 +9,7 @@
     <uses-feature android:name="android.hardware.barometer" android:required="false"/>
     <uses-feature android:name="android.hardware.light" android:required="false"/>
     <uses-feature android:name="android.hardware.relative_humidity" android:required="false"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -29,6 +30,9 @@
             </intent-filter>
         </activity>
 
+        <!--Location services and activities declaration-->
+        <service android:name=".location.LocationService"></service>
+
         <!--Main activity declaration-->
 
         <activity android:name=".MainActivity">
@@ -43,10 +47,5 @@
                 <action android:name="salinas.primary.randomdata.BROADCAST"/>
             </intent-filter>
         </activity>
-
-
-
-
     </application>
-
 </manifest>
