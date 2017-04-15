@@ -15,6 +15,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.*;
 
 import static salinas.primary.location.Constants.*;
+import static salinas.primary.data.Constants.*;
 
 /**
  * Created by Jose Salinas on 4/15/2017.
@@ -31,7 +32,6 @@ public class LocationService extends IntentService implements GoogleApiClient.Co
         super(name);
     }
 
-    Location lastKnownLocation;
     GoogleApiClient googleApiClient;
 
     @Override
@@ -44,7 +44,7 @@ public class LocationService extends IntentService implements GoogleApiClient.Co
         }
     }
 
-    private int isConnected = IS_NOT_CONNECTED;
+    private String isConnected = IS_NOT_CONNECTED;
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -61,10 +61,38 @@ public class LocationService extends IntentService implements GoogleApiClient.Co
         isConnected = IS_FAILED_CONNECTION;
     }
 
+    private Location lastKnownLocation;
+    private double lastKnownLatitude;
+    private double lastKnownLongitude;
+
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         googleApiClient.connect();
 
+        if (isConnected == IS_CONNECTED) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                Intent requestIntent = new Intent(Constants.REQUEST_LOCATION_PERMISSION);
+                requestIntent.putExtra(Constants.REQUEST_LOCATION_PERMISSION_PERMISISON_MESSAGE, ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION));
+                sendBroadcast(requestIntent);
+                return;
+            }
+            lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+            if(lastKnownLocation != null) {
+                lastKnownLatitude = lastKnownLocation.getLatitude();
+                lastKnownLongitude = lastKnownLocation.getLongitude();
+            } else {
+                lastKnownLatitude = DATA_UNAVAILABLE;
+                lastKnownLongitude = DATA_UNAVAILABLE;
+            }
+
+            Intent locationIntent = new Intent(Constants.BROADCAST_LOCATION);
+            locationIntent.putExtra(Constants.BROADCAST_LOCATION_LATITUDE, lastKnownLatitude);
+            locationIntent.putExtra(Constants.BROADCAST_LOCATION_LONGITUDE, lastKnownLongitude);
+            sendBroadcast(locationIntent);
+        } else {
+            Intent connectionIntent = new Intent(Constants.BROADCAST_LOCATION);
+            connectionIntent.putExtra(Constants.BROADCAST_CONNECTION_STATUS, isConnected);
+        }
     }
 
     @Override
