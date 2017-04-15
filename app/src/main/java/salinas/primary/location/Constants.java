@@ -12,10 +12,16 @@ public class Constants {
     public static final String IS_CONNECTED = "IS_CONNECTED";
     public static final String IS_CONNECTION_SUSPENDED = "IS_CONNECTION_SUSPENDED";
 
+    public static final String HAS_LOCATION_PERMISSIONS = "HAS_LOCATION_PERMISSIONS";
+    public static final String NO_LOCATION_PERMISSIONS = "NO_LOCATION_PERMISSIONS";
+
     public static final String REQUEST_LOCATION_PERMISSION = "salinas.primary.location.REQUEST_LOCATION_PERMISSION";
     public static final String REQUEST_LOCATION_PERMISSION_PERMISISON_MESSAGE = "salinas.primary.location.REQUEST_LOCATION_PERMISSION_MESSAGE";
 
     public static final String BROADCAST_LOCATION = "salinas.primary.location.BROADCAST_LOCATION";
     public static final String BROADCAST_LOCATION_LATITUDE = "salinas.primary.location.BROADCAST_LOCATION_LATITUDE";
     public static final String BROADCAST_LOCATION_LONGITUDE = "salinas.primary.location.BROADCAST_LOCATION_LONGITUDE";
+
+    public static final long DEFAULT_LOCATION_UPDATE_INTERVAL = 5*60*1000;
+    public static final long FASTEST_LOCATION_UPDATE_INTERVAL = 5*60*1000;
 }
