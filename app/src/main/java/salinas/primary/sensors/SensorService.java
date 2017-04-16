@@ -52,6 +52,7 @@ public class SensorService extends IntentService implements SensorEventListener 
         if(dataParameters.get(0).equals("TRUE")) {
             hasLocation = true;
             requestLocationUpdates();
+
             if(dataParameters.get(1).equals("TRUE")) {
                 hasHumidity = true;
             }
@@ -68,6 +69,7 @@ public class SensorService extends IntentService implements SensorEventListener 
                 hasUserID = true;
             }
         } else {
+            Log.e(TAG, "Location settings are disabled, terminating sensor service.");
             stopSelf();
         }
 
@@ -77,7 +79,9 @@ public class SensorService extends IntentService implements SensorEventListener 
                 try {
                     while(true) {
                         updateData();
+                        Log.i(TAG, "Updating sensor information.");
                         broadcastData();
+                        Log.i(TAG, "Broadcasting sensor information.");
                         Thread.sleep(3*1000);
                     }
                 } catch (InterruptedException e) {
