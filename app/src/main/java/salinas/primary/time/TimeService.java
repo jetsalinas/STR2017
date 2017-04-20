@@ -45,21 +45,29 @@ public class TimeService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
 
-        currentCalendar =  Calendar.getInstance();
-        currentMilis = currentCalendar.get(Calendar.MILLISECOND);
-        currentSecond = currentCalendar.get(Calendar.SECOND);
-        currentMinute = currentCalendar.get(Calendar.MINUTE);
-        currentHour = currentCalendar.get(Calendar.HOUR_OF_DAY);
-        currentDate = currentCalendar.get(Calendar.DAY_OF_MONTH);
-        currentMonth = currentCalendar.get(Calendar.MONTH);
-        currentYear = currentCalendar.get(Calendar.YEAR);
-        Log.i(TAG, "Creating calendar instance");
+        while(true) {
+            try {
+                Thread.sleep(3*1000);
+                currentCalendar =  Calendar.getInstance();
+                currentMilis = currentCalendar.get(Calendar.MILLISECOND);
+                currentSecond = currentCalendar.get(Calendar.SECOND);
+                currentMinute = currentCalendar.get(Calendar.MINUTE);
+                currentHour = currentCalendar.get(Calendar.HOUR_OF_DAY);
+                currentDate = currentCalendar.get(Calendar.DAY_OF_MONTH);
+                currentMonth = currentCalendar.get(Calendar.MONTH);
+                currentYear = currentCalendar.get(Calendar.YEAR);
+                Log.i(TAG, "Creating calendar instance");
 
-        timeString = TimeStringBuilder.timeDataString(currentMilis, currentSecond, currentMinute, currentHour, currentDate, currentMonth, currentYear);
-        Intent timeIntent = new Intent(Constants.BROADCAST_TIME_DATA);
-        timeIntent.putExtra(TIME_DATA_STRING, timeString);
-        sendBroadcast(timeIntent);
-        Log.i(TAG, "Broadcasted time intent: " + timeString);
+                timeString = TimeStringBuilder.timeDataString(currentMilis, currentSecond, currentMinute, currentHour, currentDate, currentMonth, currentYear);
+                Intent timeIntent = new Intent(Constants.BROADCAST_TIME_DATA);
+                timeIntent.putExtra(TIME_DATA_STRING, timeString);
+                sendBroadcast(timeIntent);
+                Log.i(TAG, "Broadcasted time intent: " + timeString);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
 
     }
 }
