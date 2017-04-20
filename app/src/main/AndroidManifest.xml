@@ -11,6 +11,9 @@
     <uses-feature android:name="android.hardware.relative_humidity" android:required="false"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -34,8 +37,10 @@
         <!--Location services and activities declaration-->
         <service android:name=".location.LocationService"></service>
 
-        <!--Main activity declaration-->
+        <!--File services declaration-->
+        <service android:name=".file.FileService"></service>
 
+        <!--Main activity declaration-->
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

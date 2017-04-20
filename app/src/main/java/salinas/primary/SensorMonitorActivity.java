@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import salinas.primary.data.UserParameterStringBuilder;
+import salinas.primary.file.FileService;
 import salinas.primary.sensors.Constants;
 import salinas.primary.sensors.SensorService;
 
@@ -64,6 +65,9 @@ public class SensorMonitorActivity extends Activity {
         Intent sensorDataIntent = new Intent(this, SensorService.class);
         sensorDataIntent.setData(Uri.parse(UserParameterStringBuilder.userParameterString(true, true, true, true, true, true)));
         this.startService(sensorDataIntent);
+
+        Intent fileOutputIntent = new Intent(this, FileService.class);
+        this.startService(fileOutputIntent);
     }
 
     @Override
