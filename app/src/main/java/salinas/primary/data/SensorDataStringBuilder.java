@@ -8,8 +8,10 @@ import static salinas.primary.data.Constants.NO_USER_ID;
 
 public class SensorDataStringBuilder {
 
-    public static String sensorDataString(double latitude, double longitude, double humidity, double light, double pressure, double temperature, String userID) {
+    public static String sensorDataString(String time, double latitude, double longitude, double humidity, double light, double pressure, double temperature, String userID) {
         StringBuilder stringBuilder = new StringBuilder("");
+        stringBuilder.append(time);
+        stringBuilder.append(',');
         stringBuilder.append(latitude);
         stringBuilder.append(',');
         stringBuilder.append(longitude);
@@ -27,8 +29,10 @@ public class SensorDataStringBuilder {
         return stringBuilder.toString();
     }
 
-    public static String sensorDataString(double latitude, double longitude, double humidity, double light, double pressure, double temperature) {
+    public static String sensorDataString(String time, double latitude, double longitude, double humidity, double light, double pressure, double temperature) {
         StringBuilder stringBuilder = new StringBuilder("");
+        stringBuilder.append(time);
+        stringBuilder.append(',');
         stringBuilder.append(latitude);
         stringBuilder.append(',');
         stringBuilder.append(longitude);
