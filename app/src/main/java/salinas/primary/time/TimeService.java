@@ -56,7 +56,7 @@ public class TimeService extends IntentService {
         Log.i(TAG, "Creating calendar instance");
 
         timeString = TimeStringBuilder.timeDataString(currentMilis, currentSecond, currentMinute, currentHour, currentDate, currentMonth, currentYear);
-        Intent timeIntent = new Intent(this, SensorService.class);
+        Intent timeIntent = new Intent(Constants.BROADCAST_TIME_DATA);
         timeIntent.putExtra(TIME_DATA_STRING, timeString);
         sendBroadcast(timeIntent);
         Log.i(TAG, "Broadcasted time intent: " + timeString);
