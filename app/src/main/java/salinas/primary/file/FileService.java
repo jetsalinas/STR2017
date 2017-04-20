@@ -99,13 +99,9 @@ public class FileService extends IntentService {
         try {
             File file = makeDataOutputFile(outputFileName);
             Log.e(TAG, "Attempting to write to file.");
-            FileWriter fileWriter = new FileWriter(file);
-            fileWriter.append(data);
-            fileWriter.flush();
-            fileWriter.close();
 
             FileOutputStream fileOutputStream = new FileOutputStream(file, true);
-            fileOutputStream.write(data.getBytes(Charset.forName("UTF-8")));
+            fileOutputStream.write((data + "\n").getBytes(Charset.forName("UTF-8")));
             fileOutputStream.flush();
             fileOutputStream.close();
             Log.e(TAG, "Writing to file complete.");
