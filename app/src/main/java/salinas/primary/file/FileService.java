@@ -83,7 +83,8 @@ public class FileService extends IntentService {
     }
 
     private File makeDataOutputFile(String outputFileName) throws IOException {
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), outputFileName);
+        File file = new File(Environment.getExternalStorageDirectory(), outputFileName);
+        Log.i(TAG, file.toString());
 
         if(!file.exists()) {
             Log.e(TAG, "File does not exist, attempting to create file.");

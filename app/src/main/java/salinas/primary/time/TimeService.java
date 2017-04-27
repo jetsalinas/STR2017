@@ -44,7 +44,7 @@ public class TimeService extends IntentService {
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-
+        Log.i(TAG, "Handling TimeService intent.");
         while(true) {
             try {
                 Thread.sleep(3*1000);
@@ -68,6 +68,15 @@ public class TimeService extends IntentService {
             }
 
         }
+    }
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

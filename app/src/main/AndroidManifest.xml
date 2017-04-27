@@ -37,6 +37,9 @@
         <!--Location services and activities declaration-->
         <service android:name=".location.LocationService"></service>
 
+        <!--Time services and activities declaration-->
+        <service android:name=".time.TimeService"></service>
+
         <!--File services declaration-->
         <service android:name=".file.FileService"></service>
 

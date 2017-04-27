@@ -206,7 +206,7 @@ public class SensorService extends IntentService implements SensorEventListener 
         registerReceiver(timeBroadcastReceiver, intentFilter);
 
         Intent intent = new Intent(this, TimeService.class);
-        sendBroadcast(intent);
+        this.startService(intent);
         Log.i(TAG, "Requesting time updates.");
     }
 
