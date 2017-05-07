@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -41,12 +42,18 @@ public class FileService extends IntentService {
             Runnable updateFile = new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        Log.i(TAG, "Running file output thread");
-                        writeToFile(Constants.OUTPUT_FILE_NAME, data);
-                        Thread.sleep(3*1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    while(true) {
+                        try {
+                            Log.i(TAG, "Running file output thread");
+                            Thread.sleep(3*1000);
+                            writeToFile(Constants.OUTPUT_FILE_NAME, data);
+                        } catch (InterruptedException e) {
+                            Log.e(TAG, "Thread interrupted.");
+                            e.printStackTrace();
+                        } catch(IOException e) {
+                            Log.e(TAG, "File not found.");
+                            e.printStackTrace();
+                        }
                     }
                 }
             };
@@ -71,6 +78,7 @@ public class FileService extends IntentService {
         @Override
         public void onReceive(Context context, Intent intent) {
             data = intent.getStringExtra(salinas.primary.sensors.Constants.BASIC_SENSOR_DATA_STATUS);
+            Log.i(TAG, "Updating data: " + data);
         }
     }
 
@@ -82,34 +90,45 @@ public class FileService extends IntentService {
         return false;
     }
 
-    private File makeDataOutputFile(String outputFileName) throws IOException {
-        File file = new File(Environment.getExternalStorageDirectory(), outputFileName);
+    private File makeDataOutputFile(String outputFileName) throws IOException{
+        File path  = new File(this.getExternalFilesDir(null), "output");
+        if(!path.exists()) {
+            path.mkdirs();
+        }
+        File file = new File(path, outputFileName);
+        file.createNewFile();
+//        File file = new File(Environment.getExternalStorageDirectory(), outputFileName);
         Log.i(TAG, file.toString());
 
-        if(!file.exists()) {
-            Log.e(TAG, "File does not exist, attempting to create file.");
-            new File(file.getParent()).mkdirs();
-            file.createNewFile();
-        }
+//        if(!file.exists()) {
+//            Log.e(TAG, "File does not exist, attempting to create file.");
+//            new File(file.getParent()).mkdirs();
+//            file.createNewFile();
+//        }
 //
 //        Log.i(TAG, "File found. Returning file.");
         return file;
     }
 
-    private void writeToFile(String outputFileName, String data) {
-        try {
-            File file = makeDataOutputFile(outputFileName);
-            Log.e(TAG, "Attempting to write to file.");
+    private void writeToFile(String outputFileName, String data) throws IOException{
 
-            FileOutputStream fileOutputStream = new FileOutputStream(file, true);
-            fileOutputStream.write((data + "\n").getBytes(Charset.forName("UTF-8")));
-            fileOutputStream.flush();
-            fileOutputStream.close();
-            Log.e(TAG, "Writing to file complete.");
+        File file = makeDataOutputFile(outputFileName);
+        FileWriter fileWriter = new FileWriter(file);
+//        FileOutputStream fileOutputStream = new FileOutputStream(file, true);
+
+        try {
+            Log.e(TAG, "Attempting to write to file.");
+//            fileOutputStream.write((data + "\n").getBytes(Charset.forName("UTF-8")));
+            fileWriter.append(data + "\n");
+            Log.i(TAG, "Writing to file complete.");
         } catch(IOException e){
             e.printStackTrace();
-
-            Log.e(TAG, "Could not write to file. " + e.getMessage());
+            Log.i(TAG, "Could not write to file. " + e.getMessage());
+        } finally {
+            fileWriter.flush();
+            fileWriter.close();
+//            fileOutputStream.flush();
+//            fileOutputStream.close();
         }
     }
 
