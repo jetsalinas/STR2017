@@ -15,10 +15,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import salinas.primary.data.SensorDataStringBuilder;
-import salinas.primary.location.Constants.*;
 import salinas.primary.location.LocationService;
+import salinas.primary.time.TimeService;
 
 import static salinas.primary.data.Constants.*;
+import static salinas.primary.time.Constants.BROADCAST_TIME_DATA;
+import static salinas.primary.time.Constants.TIME_DATA_STRING;
 
 /**
  * Created by Jose Salinas on 4/14/2017.
@@ -46,12 +48,13 @@ public class SensorService extends IntentService implements SensorEventListener 
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        String dataString = intent.getDataString();
+        final String dataString = intent.getDataString();
         ArrayList<String> dataParameters = new ArrayList<>(Arrays.asList(dataString.split(",")));
 
         if(dataParameters.get(0).equals("TRUE")) {
             hasLocation = true;
             requestLocationUpdates();
+            requestTimeUpdates();
 
             if(dataParameters.get(1).equals("TRUE")) {
                 hasHumidity = true;
@@ -81,7 +84,7 @@ public class SensorService extends IntentService implements SensorEventListener 
                         updateData();
                         Log.i(TAG, "Updating sensor information.");
                         broadcastData();
-                        Log.i(TAG, "Broadcasting sensor information.");
+                        Log.i(TAG, "Broadcasting sensor information: " + data);
                         Thread.sleep(3*1000);
                     }
                 } catch (InterruptedException e) {
@@ -92,6 +95,7 @@ public class SensorService extends IntentService implements SensorEventListener 
         updateData.run();
     }
 
+    private String time;
     private double latitude;
     private double longitude;
     private double humidity;
@@ -109,6 +113,7 @@ public class SensorService extends IntentService implements SensorEventListener 
 
     @Override
     public void onCreate() {
+        time = "";
         latitude = DATA_UNAVAILABLE;
         longitude = DATA_UNAVAILABLE;
         humidity = DATA_UNAVAILABLE;
@@ -123,8 +128,11 @@ public class SensorService extends IntentService implements SensorEventListener 
     @Override
     public void onDestroy() {
         unregisterSensors();
-        if(broadcastReceiver != null) {
-            unregisterReceiver(broadcastReceiver);
+        if(locationBroadcastReceiver != null) {
+            unregisterReceiver(locationBroadcastReceiver);
+        }
+        if(timeBroadcastReceiver != null) {
+            unregisterReceiver(timeBroadcastReceiver);
         }
         super.onDestroy();
     }
@@ -168,12 +176,12 @@ public class SensorService extends IntentService implements SensorEventListener 
         humidity = Double.parseDouble(Float.valueOf(event.values[0]).toString());
     }
 
-    LocationBroadcastReceiver broadcastReceiver;
+    LocationBroadcastReceiver locationBroadcastReceiver;
 
     private void requestLocationUpdates() {
-        broadcastReceiver = new LocationBroadcastReceiver();
+        locationBroadcastReceiver = new LocationBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter(salinas.primary.location.Constants.BROADCAST_LOCATION);
-        registerReceiver(broadcastReceiver, intentFilter);
+        registerReceiver(locationBroadcastReceiver, intentFilter);
 
         Intent locationIntent = new Intent(this, LocationService.class);
         this.startService(locationIntent);
@@ -190,11 +198,31 @@ public class SensorService extends IntentService implements SensorEventListener 
         }
     }
 
+    TimeBroadcastReceiver timeBroadcastReceiver;
+
+    private void requestTimeUpdates() {
+        timeBroadcastReceiver = new TimeBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter(BROADCAST_TIME_DATA);
+        registerReceiver(timeBroadcastReceiver, intentFilter);
+
+        Intent intent = new Intent(this, TimeService.class);
+        //this.startService(intent);
+        Log.i(TAG, "Requesting time updates.");
+    }
+
+    protected class TimeBroadcastReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            time = intent.getStringExtra(TIME_DATA_STRING);
+            Log.i(TAG, "Updating time: " + time);
+        }
+    }
+
     private void updateData() {
         if(hasUserID) {
-            data = SensorDataStringBuilder.sensorDataString(latitude, longitude, humidity, light, pressure, temperature, userID);
+            data = SensorDataStringBuilder.sensorDataString(time, latitude, longitude, humidity, light, pressure, temperature, userID);
         } else {
-            data = SensorDataStringBuilder.sensorDataString(latitude, longitude, humidity, light, pressure, temperature);
+            data = SensorDataStringBuilder.sensorDataString(time, latitude, longitude, humidity, light, pressure, temperature);
         }
     }
 

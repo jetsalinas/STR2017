@@ -122,7 +122,7 @@ public class RandomDataService extends IntentService {
             userID = "UNKNOWN";
         }
 
-        data = SensorDataStringBuilder.sensorDataString(latitude, longitude, humidity, light, pressure, temperature, userID);
+        data = SensorDataStringBuilder.sensorDataString("",latitude, longitude, humidity, light, pressure, temperature, userID);
     }
 
     private void broadcastData() {

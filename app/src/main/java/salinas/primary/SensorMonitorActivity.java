@@ -96,13 +96,13 @@ public class SensorMonitorActivity extends Activity {
         @Override
         public void onReceive(Context context, final Intent intent) {
             data = new ArrayList<>(Arrays.asList(intent.getStringExtra(Constants.BASIC_SENSOR_DATA_STATUS).split(",")));
-            latitude = data.get(0);
-            longitude = data.get(1);
-            humidity = data.get(2);
-            light = data.get(3);
-            pressure = data.get(4);
-            temperature = data.get(5);
-            userID = data.get(6);
+            latitude = data.get(1);
+            longitude = data.get(2);
+            humidity = data.get(3);
+            light = data.get(4);
+            pressure = data.get(5);
+            temperature = data.get(6);
+            userID = data.get(7);
 
             handler.post(new Runnable() {
                 @Override
